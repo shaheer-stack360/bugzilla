@@ -14,7 +14,6 @@ const permissionSchema = new Schema({
   description: { 
     type: String 
   },
-}, { timestamps: true,   collection: 'permission'  // <-- ADD THIS LINE
-});
+}, { timestamps: true});
 
 export default mongoose.model('Permission', permissionSchema);

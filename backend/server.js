@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import connectDB from './db/connection.js';
 import { login, register } from './controllers/auth.controller.js';
 import bugRoutes from './routes/bugs.routes.js';
@@ -16,6 +17,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.json({ 

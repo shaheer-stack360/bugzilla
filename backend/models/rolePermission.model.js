@@ -15,10 +15,9 @@ const rolePermissionSchema = new Schema({
     required: true 
   }
 }, { 
-  timestamps: true ,   collection: 'role_permissions'  // <-- ADD THIS LINE
-});
+  timestamps: true });
 
 // Create compound index to prevent duplicate role-permission pairs
 rolePermissionSchema.index({ role: 1, permission: 1 }, { unique: true });
 
-export default mongoose.model('RolePermission', rolePermissionSchema);
+export default mongoose.model('Role_Permission', rolePermissionSchema);
