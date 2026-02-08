@@ -21,8 +21,20 @@ export default function Login() {
 
       console.log('✅ Login successful:', response.data);
 
-      window.location.href = '/bugs';
-      
+      // Store user and token in cookies
+      try {
+        if (response.data?.user) {
+          document.cookie = `user=${JSON.stringify(response.data.user)}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+        }
+        if (response.data?.token) {
+          document.cookie = `token=${response.data.token}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 days
+        }
+      } catch (e) {
+        console.warn('Unable to store login data in cookies', e);
+      }
+
+      window.location.href = '/';
+
     } catch (err) {
       console.error('❌ Login error:', err);
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -38,14 +50,14 @@ export default function Login() {
   return (
     <div style={{ padding: '20px', maxWidth: '500px', margin: '50px auto' }}>
       <h1>Bugzilla Login</h1>
-      
+
       <form onSubmit={handleLogin}>
         {error && (
           <div style={{ color: 'red', padding: '10px', background: '#ffe6e6', borderRadius: '4px', marginBottom: '15px' }}>
             <strong>Error:</strong> {error}
           </div>
         )}
-        
+
         <div style={{ marginBottom: '15px' }}>
           <label>Email:</label>
           <input
@@ -70,13 +82,13 @@ export default function Login() {
           />
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={loading}
-          style={{ 
-            padding: '12px 24px', 
-            background: '#007bff', 
-            color: 'white', 
+          style={{
+            padding: '12px 24px',
+            background: '#007bff',
+            color: 'white',
             border: 'none',
             borderRadius: '4px',
             fontSize: '16px',
@@ -87,13 +99,13 @@ export default function Login() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
 
-        <button 
+        <button
           type="button"
           onClick={handleRegisterRedirect}
-          style={{ 
-            padding: '12px 24px', 
-            background: '#6c757d', 
-            color: 'white', 
+          style={{
+            padding: '12px 24px',
+            background: '#6c757d',
+            color: 'white',
             border: 'none',
             borderRadius: '4px',
             fontSize: '16px'

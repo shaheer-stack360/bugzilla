@@ -1,37 +1,45 @@
+import { Actions, Subjects } from '../common/ability.js';
+
+function mapPermissionString(permission) {
+  // expected format: resource:action e.g. 'bug:read'
+  if (!permission || typeof permission !== 'string') return null;
+  const parts = permission.split(':');
+  if (parts.length !== 2) return null;
+  const [resourceRaw, actionRaw] = parts;
+  const resource = resourceRaw.toLowerCase();
+  const action = actionRaw.toLowerCase();
+
+  // map resource to Subjects
+  let subject = null;
+  if (resource === 'bug' || resource === 'bugs') subject = Subjects.Bug;
+  if (resource === 'user' || resource === 'users') subject = Subjects.User;
+  if (!subject) subject = Subjects.All;
+
+  // map action to Actions (fallback to raw)
+  const actionMap = Object.values(Actions).includes(action) ? action : action;
+
+  return { action: actionMap, subject };
+}
+
 export default function checkPermission(requiredPermission) {
   return (req, res, next) => {
-    console.log('🔐 Checking permission:', {
-      required: requiredPermission,
-      userPermissions: req.user?.permissions,
-      userId: req.user?.id,
-      userRole: req.user?.role
-    });
-    
     if (!req.user) {
-      console.log('❌ No user found in request');
-      return res.status(401).json({ 
-        success: false,
-        message: 'Not authenticated' 
-      });
+      return res.status(401).json({ success: false, message: 'Not authenticated' });
     }
 
-    const userPermissions = req.user.permissions || [];
-    
-    // Check if user has the required permission
-    const hasPermission = userPermissions.includes(requiredPermission);
-    
-    if (hasPermission) {
-      console.log(`✅ User has permission: ${requiredPermission}`);
-      next();
-    } else {
-      console.log(`❌ User lacks permission: ${requiredPermission}`);
-      console.log(`   Available permissions: ${userPermissions.join(', ')}`);
-      return res.status(403).json({ 
-        success: false,
-        message: 'Insufficient permissions',
-        requiredPermission,
-        availablePermissions: userPermissions
-      });
+    const ability = req.ability;
+    if (!ability) {
+      return res.status(500).json({ success: false, message: 'Authorization not initialized' });
     }
+
+    const mapped = mapPermissionString(requiredPermission);
+    if (!mapped) {
+      return res.status(400).json({ success: false, message: 'Invalid permission format' });
+    }
+
+    const canDo = ability.can(mapped.action, mapped.subject);
+    if (canDo) return next();
+
+    return res.status(403).json({ success: false, message: 'Insufficient permissions', requiredPermission });
   };
 }

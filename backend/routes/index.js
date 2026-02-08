@@ -3,8 +3,7 @@ import express from 'express';
 import { 
   login, 
   register, 
-  logout, 
-  verify 
+  logout
 } from '../controllers/auth.controller.js';
 import authenticateJWT from '../middleware/authenticateJWT.js';
 
@@ -19,7 +18,6 @@ const router = express.Router();
 router.post('/login', login);
 router.post('/register', register);
 router.post('/logout', logout);
-router.get('/verify', authenticateJWT(), verify);
 
 // ========== PROTECTED ROUTES ==========
 // Bug routes
@@ -46,7 +44,7 @@ router.use('*', (req, res) => {
     error: 'Route not found',
     path: req.originalUrl,
     availableEndpoints: {
-      public: ['POST /login', 'POST /register', 'POST /logout', 'GET /verify'],
+      public: ['POST /login', 'POST /register', 'POST /logout'],
       protected: ['GET /bugs', 'GET /users', 'GET /admin/*']
     }
   });

@@ -2,12 +2,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import api from './api/axios';
-import Login from './pages/login.jsx';
+import Layout from './components/Layout';
+import Login from './pages/Login.jsx';
 import Register from './pages/register.jsx';
-import Bugs from './pages/Bugs.jsx';
 import Home from './components/Home.jsx';
-import CreateBug from './pages/createBugs.jsx';
-import BugManage from './pages/bugsManage.jsx';
+import Dashboard from './pages/Dashboard.jsx';
 
 
 function App() {
@@ -29,12 +28,13 @@ function App() {
         return;
       }
 
-      await api.get('/verify');
+      // Assume authenticated if token exists (server sets cookie on login).
+      // Removed dependency on /verify endpoint.
       setIsAuthenticated(true);
     } catch (error) {
       setIsAuthenticated(false);
       Cookies.remove('token');
-      Cookies.remove('user');
+      localStorage.removeItem('user');
     } finally {
       setAuthChecking(false);
     }
@@ -46,7 +46,7 @@ function App() {
       return <div style={{ padding: '50px', textAlign: 'center' }}>Loading...</div>;
     }
 
-    //return isAuthenticated ? children : <Navigate to="/login" />;
+    return isAuthenticated ? children : <Navigate to="/login" />;
   };
 
   // Public route component - SIMPLIFIED: Only check auth once
@@ -70,21 +70,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected routes */}
-        <Route path="/bugs" element={
+        {/* Protected routes with Layout */}
+        <Route path="/dashboard" element={
           <ProtectedRoute>
-            <Bugs />
-          </ProtectedRoute>
-        } />
-        <Route path="/bugs/manage" element={
-          <ProtectedRoute>
-            <BugManage />
-          </ProtectedRoute>
-        } />
-
-        <Route path="/bugs/manage/:id" element={
-          <ProtectedRoute>
-            <BugManage />
+            <Layout>
+              <Dashboard />
+            </Layout>
           </ProtectedRoute>
         } />
 

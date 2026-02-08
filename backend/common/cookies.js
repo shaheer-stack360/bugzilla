@@ -1,14 +1,11 @@
 const setAuthCookies = (res, token, userData) => {
-  
   res.cookie('token', token, {
     httpOnly: false,
-    secure: false, //false for localhost development
-    sameSite: 'lax', //'lax' works better for localhost
+    secure: false,
+    sameSite: 'lax',
     maxAge: 5 * 60 * 60 * 1000,
     path: '/'
   });
-
-  console.log('✅ Cookies set successfully');
 };
 
 // Helper function to clear cookies
