@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { setAuthCookies } from '../common/cookies.js';
-import encrypt_pass from '../common/pass_encryption.js';
+import { setAuthCookies } from '../utils/cookies.js';
+import encrypt_pass from '../utils/pass_encryption.js';
 import User from '../models/users.model.js';
 import Role from '../models/roles.model.js';
 import RolePermission from '../models/rolePermission.model.js';

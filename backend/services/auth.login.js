@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { setAuthCookies } from '../common/cookies.js';
+import { setAuthCookies } from '../utils/cookies.js';
 import User from '../models/users.model.js';
 import RolePermission from '../models/rolePermission.model.js';
 
@@ -29,6 +29,15 @@ export async function loginUser(credentials, res) {
         success: false,
         statusCode: 401,
         message: 'Invalid credentials'
+      };
+    }
+
+        // ✅ ADD THIS CHECK: Verify user is active
+    if (user.isActive === false) {
+      return {
+        success: false,
+        statusCode: 403,
+        message: 'Account is deactivated. Please contact administrator.'
       };
     }
 

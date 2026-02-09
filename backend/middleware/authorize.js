@@ -1,5 +1,5 @@
 import { ForbiddenError } from '@casl/ability';
-import { Subjects } from '../common/ability.js';
+import { Subjects } from '../utils/ability.js';
 
 /**
  * CASL Authorization Middleware

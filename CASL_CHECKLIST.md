@@ -17,7 +17,7 @@
 
 ## ✅ New Files Created
 
-- [x] `backend/common/ability.js` - CASL ability definitions (4.0 KB)
+- [x] `backend/utlis/ability.js` - CASL ability definitions (4.0 KB)
 - [x] `backend/middleware/authorize.js` - Authorization middleware (2.3 KB)
 - [x] `backend/CASL_INTEGRATION.js` - Technical documentation (~250 lines)
 - [x] `backend/CASL_QUICKREF.md` - Quick reference guide (~150 lines)

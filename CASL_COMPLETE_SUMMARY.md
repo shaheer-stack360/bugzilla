@@ -35,7 +35,7 @@ STEP 1: Dependencies ✅
   └─ Both installed and verified
 
 STEP 2: Core Implementation ✅
-  ├─ Created backend/common/ability.js
+  ├─ Created backend/utlis/ability.js
   │  └─ Defines all CASL authorization rules
   ├─ Created backend/middleware/authorize.js
   │  └─ CASL authorization middleware
@@ -87,7 +87,7 @@ STEP 4: Documentation ✅
    Easy to update without code changes
 
 ✨ Centralized Rules
-   All authorization logic in one file: backend/common/ability.js
+   All authorization logic in one file: backend/utlis/ability.js
    Single source of truth
    Easy to audit and modify
 
@@ -102,7 +102,7 @@ STEP 4: Documentation ✅
 📂 FILES CREATED (7 NEW FILES)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. backend/common/ability.js (4.0 KB)
+1. backend/utlis/ability.js (4.0 KB)
    ├─ Purpose: Define CASL authorization rules
    ├─ Key Functions:
    │  ├─ defineAbilityFor(user, permissions) - Main function

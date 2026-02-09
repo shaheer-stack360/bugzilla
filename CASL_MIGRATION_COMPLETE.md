@@ -8,7 +8,7 @@ Successfully refactored the RBAC (Role-Based Access Control) system from manual 
 
 ## New Files Created
 
-### 1. `/backend/common/ability.js`
+### 1. `/backend/utlis/ability.js`
 - Defines all CASL abilities and rules
 - `defineAbilityFor(user, permissions)` - Main function to build user abilities
 - Exports `Actions` and `Subjects` enums

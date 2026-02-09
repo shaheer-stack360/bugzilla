@@ -3,13 +3,12 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import connectDB from './db/connection.js';
-import { login, register } from './controllers/auth.controller.js';
-import bugRoutes from './routes/bugs.routes.js';
+import routes from './routes/index.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;  
+const PORT = process.env.PORT || 5000;
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -20,35 +19,21 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Bugzilla API is running',
-    endpoints: {
-      register: 'POST /register',
-      login: 'POST /login',
-      bugs: 'GET /bugs'
-    }
+    status: 'ok'
   });
 });
 
-// Auth routes
-app.post('/login', login);
-app.post('/register', register); // Add register route
+app.use('/', routes);
 
-// Bug routes
-app.use('/bugs', bugRoutes);
-
-// Error handling middleware
+// ========== GLOBAL ERROR HANDLER ==========
 app.use((err, req, res, next) => {
   console.error('Server error:', err.stack);
-  res.status(500).json({ 
+  res.status(err.status || 500).json({
     error: 'Internal server error',
-    message: err.message 
+    message: err.message
   });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
 });
 
 async function startServer() {

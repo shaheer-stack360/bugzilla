@@ -1,4 +1,3 @@
-// routes/index.js
 import express from 'express';
 import { 
   login, 
@@ -6,10 +5,8 @@ import {
   logout
 } from '../controllers/auth.controller.js';
 import authenticateJWT from '../middleware/authenticateJWT.js';
-
-import bugRoutes from '../routes';
-/*import userRoutes from './users.js';
-import adminRoutes from './admin.js';*/
+import bugRoutes from '../routes/bugs.routes.js';
+import adminRoutes from '../routes/admin.routes.js';
 
 const router = express.Router();
 
@@ -22,31 +19,16 @@ router.post('/logout', logout);
 // ========== PROTECTED ROUTES ==========
 // Bug routes
 router.use('/bugs', authenticateJWT(), bugRoutes);
-
-// User management routes (for admins)
-/*router.use('/users', authenticateJWT(), userRoutes);
+router.use('/admin', adminRoutes);
 
 // Admin routes
-router.use('/admin', authenticateJWT(), adminRoutes);
-
-// ========== HEALTH CHECK ==========
-router.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    service: 'Bugzilla API'
-  });
-});*/
+//router.use('/admin', authenticateJWT(), adminRoutes);
 
 // ========== 404 HANDLER ==========
-router.use('*', (req, res) => {
+router.use((req, res) => {
   res.status(404).json({ 
     error: 'Route not found',
-    path: req.originalUrl,
-    availableEndpoints: {
-      public: ['POST /login', 'POST /register', 'POST /logout'],
-      protected: ['GET /bugs', 'GET /users', 'GET /admin/*']
-    }
+    path: req.originalUrl
   });
 });
 

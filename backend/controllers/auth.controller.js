@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { clearAuthCookies } from '../common/cookies.js';
+import { clearAuthCookies } from '../utils/cookies.js';
 import { registerUser, getAvailableRoleNames } from '../services/auth.register.js';
 import { loginUser } from '../services/auth.login.js';
 
