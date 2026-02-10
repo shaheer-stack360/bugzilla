@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../services/api/axios.js';
 
-const Login = () => {
+const Login = ({setIsAuth}) => {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
@@ -20,6 +20,7 @@ const Login = () => {
     try {
       const response = await authAPI.login(form);
       if (response.data.success) {
+        setIsAuth(true);
         navigate('/dashboard');
       } else {
         setError(response.data.message || 'Login failed');

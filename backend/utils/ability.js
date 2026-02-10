@@ -91,14 +91,12 @@ export function defineAbilityFor(user, permissions = []) {
           'title', 'description', 'expected_behavior', 'actual_behavior',
           'attachments', 'priority', 'status', 'assigned_to', 'reported_by',
           'created_at', 'updated_at'
-        ],
-        { reported_by: id }
-      );
+        ]);
 
       // QA can also open, close, and reopen bugs
-      can('open', Subjects.Bug, { reported_by: id });
-      can('close', Subjects.Bug, { reported_by: id });
-      can('reopen', Subjects.Bug, { reported_by: id });
+      can('open', Subjects.Bug);
+      can('close', Subjects.Bug);
+      can('reopen', Subjects.Bug);
     }
   }
 
@@ -146,9 +144,9 @@ export function defineAbilityFor(user, permissions = []) {
   // Special actions for QA: open, close, reopen bugs
   if (role === 'QA') {
     if (permSet.has('bug:update')) {
-      can('open', Subjects.Bug, { reported_by: id });
-      can('close', Subjects.Bug, { reported_by: id });
-      can('reopen', Subjects.Bug, { reported_by: id });
+      can('open', Subjects.Bug);
+      can('close', Subjects.Bug);
+      can('reopen', Subjects.Bug);
     }
   }
 

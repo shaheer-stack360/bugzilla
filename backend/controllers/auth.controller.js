@@ -26,8 +26,14 @@ export async function login(req, res) {
   
   if (result.success) {
     return res.status(result.statusCode).json({
+      success: true,           // frontend checks this
       message: result.message,
-      user: result.data
+      data: {                  // frontend reads from here
+        user: result.data,
+        ability: {
+          rules: result.abilityRules  // CASL rules for frontend
+        }
+      }
     });
   } else {
     return res.status(result.statusCode).json({

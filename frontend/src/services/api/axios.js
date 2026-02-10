@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { setUser, clearUser, getUser } from '../../utils/auth';
-import { createAbility, clearAbility } from '../../utils/ability';
+import { createAbility, clearAbility, setAbility } from '../../utils/ability';
 
 const API_URL = 'http://localhost:5000/';
 
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // Automatically sends cookies
+  withCredentials: true,
 });
 
 // Response interceptor for handling auth errors
@@ -32,9 +32,7 @@ export const authAPI = {
     }
     return response;
   },
-  
   register: (userData) => api.post('/register', userData),
-  
   logout: async () => {
     const response = await api.post('/logout');
     clearUser();
@@ -51,6 +49,11 @@ export const bugAPI = {
   update: (id, data) => api.put(`/bugs/${id}`, data),
   assign: (id, data) => api.put(`/bugs/${id}/assign`, data),
   delete: (id) => api.delete(`/bugs/${id}`),
+};
+
+// ✅ User API — for fetching developers dropdown etc.
+export const userAPI = {
+  getDevelopers: () => api.get('/bugs/developers'),
 };
 
 // Admin API
