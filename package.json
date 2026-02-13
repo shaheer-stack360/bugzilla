@@ -18,13 +18,15 @@
     "@casl/ability": "^6.8.0",
     "@casl/mongoose": "^8.0.5",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.1.5"
+    "mongoose": "^9.1.5",
+    "react-chartjs-2": "^5.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

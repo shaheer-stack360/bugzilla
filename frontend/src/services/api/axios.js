@@ -51,17 +51,28 @@ export const bugAPI = {
   delete: (id) => api.delete(`/bugs/${id}`),
 };
 
-// ✅ User API — for fetching developers dropdown etc.
+// User API — for fetching developers dropdown etc.
 export const userAPI = {
   getDevelopers: () => api.get('/bugs/developers'),
 };
 
 // Admin API
 export const adminAPI = {
+  // Dashboard
   getDashboard: () => api.get('/admin/dashboard'),
+  
+  // User Management
   getUsers: (params) => api.get('/admin/users', { params }),
+  getUser: (id) => api.get(`/admin/users/${id}`),
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
   deleteUser: (id) => api.delete(`/admin/users/${id}`),
+  activateUser: (id) => api.put(`/admin/users/${id}/activate`),
+  
+  // Bug Management
+  getBugs: (params) => api.get('/admin/bugs', { params }),
+  getBug: (id) => api.get(`/admin/bugs/${id}`),
+  updateBug: (id, data) => api.put(`/admin/bugs/${id}`, data),
+  deleteBug: (id) => api.delete(`/admin/bugs/${id}`),
 };
 
 export default api;
