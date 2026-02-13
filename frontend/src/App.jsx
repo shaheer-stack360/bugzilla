@@ -8,6 +8,37 @@ import BugForm from './components/BugForm';
 import BugDetail from './components/BugDetail';
 import { getUser } from './utils/auth';
 
+// Admin components
+import AdminLayout from './components/admin/AdminLayout';
+import AdminDashboard from './components/admin/AdminDashboard';
+import UserManagement from './components/admin/UserManagement';
+import BugManagement from './components/admin/BugManagement';
+
+// Protected route wrapper for admin
+const AdminRoute = ({ children }) => {
+  const user = getUser();
+  
+  // Check if user exists and has Administrator role
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  // Check if user has admin role (adjust based on your role structure)
+  const isAdmin = user.role?.name === 'Administrator' || user.role === 'Administrator';
+  
+  if (!isAdmin) {
+    return (
+      <div className="p-12 text-center">
+        <h2 className="text-2xl mb-4 text-red-600">Access Denied</h2>
+        <p className="mb-4">You need Administrator privileges to access this page.</p>
+        <a href="/dashboard" className="text-blue-600 hover:underline">Go to Dashboard</a>
+      </div>
+    );
+  }
+  
+  return children;
+};
+
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -25,6 +56,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
 
         <Route path="/login" element={
@@ -35,6 +67,7 @@ function App() {
           isAuth ? <Navigate to="/dashboard" /> : <Register />
         } />
 
+        {/* User Routes */}
         <Route path="/dashboard" element={
           isAuth ? <Dashboard setIsAuth={setIsAuth} /> : <Navigate to="/login" />
         } />
@@ -47,6 +80,19 @@ function App() {
           isAuth ? <BugDetail /> : <Navigate to="/login" />
         } />
 
+        {/* Admin Routes */}
+        <Route path="/admin" element={
+          <AdminRoute>
+            <AdminLayout />
+          </AdminRoute>
+        }>
+          <Route index element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="users" element={<UserManagement />} />
+          <Route path="bugs" element={<BugManagement />} />
+        </Route>
+
+        {/* 404 Route */}
         <Route path="*" element={
           <div className="p-12 text-center">
             <h2 className="text-2xl mb-4">404 - Page Not Found</h2>
