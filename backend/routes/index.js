@@ -17,12 +17,11 @@ router.post('/register', register);
 router.post('/logout', logout);
 
 // ========== PROTECTED ROUTES ==========
-// Bug routes
+// Bug routes - requires authentication
 router.use('/bugs', authenticateJWT(), bugRoutes);
-router.use('/admin', adminRoutes);
 
-// Admin routes
-//router.use('/admin', authenticateJWT(), adminRoutes);
+// Admin routes - requires authentication (adminCheck middleware is already in admin.routes.js)
+router.use('/admin', authenticateJWT(), adminRoutes);
 
 // ========== 404 HANDLER ==========
 router.use((req, res) => {

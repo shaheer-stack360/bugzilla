@@ -21,6 +21,7 @@ export const getDashboardStats = async (req, res) => {
       Bug.countDocuments({ status: 'Resolved' }),
       User.find({ isActive: true })
         .select('name email role createdAt')
+        .populate('role', 'name')
         .sort({ createdAt: -1 })
         .limit(5),
       Bug.find()
@@ -105,7 +106,7 @@ export const getAllUsers = async (req, res) => {
 
     const [users, total] = await Promise.all([
       User.find(query)
-        .select('-password -__v')
+        .select('-passwordHash -__v')
         .populate('role', 'name permissions')
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -132,7 +133,7 @@ export const getAllUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-      .select('-password -__v')
+      .select('-passwordHash -__v')
       .populate('role', 'name permissions');
 
     if (!user) {
@@ -148,7 +149,7 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { password, ...updateData } = req.body;
+    const { password, passwordHash, ...updateData } = req.body;
 
     // Check if email is being updated to an existing email (except current user)
     if (updateData.email) {
@@ -166,7 +167,7 @@ export const updateUser = async (req, res) => {
     }
 
     // Don't allow updating password via this endpoint
-    if (password) {
+    if (password || passwordHash) {
       return res.status(400).json({
         success: false,
         message: 'Use password reset endpoint to update password'
@@ -177,7 +178,9 @@ export const updateUser = async (req, res) => {
       req.params.id,
       updateData,
       { new: true, runValidators: true }
-    ).select('-password -__v');
+    )
+      .select('-passwordHash -__v')
+      .populate('role', 'name permissions');
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
@@ -200,7 +203,9 @@ export const deleteUser = async (req, res) => {
       req.params.id,
       { isActive: false },
       { new: true }
-    ).select('-password -__v');
+    )
+      .select('-passwordHash -__v')
+      .populate('role', 'name permissions');
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
@@ -223,7 +228,9 @@ export const activateUser = async (req, res) => {
       req.params.id,
       { isActive: true },
       { new: true }
-    ).select('-password -__v');
+    )
+      .select('-passwordHash -__v')
+      .populate('role', 'name permissions');
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });

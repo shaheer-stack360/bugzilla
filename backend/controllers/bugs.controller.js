@@ -119,6 +119,13 @@ export const updateBug = async (req, res) => {
       });
     }
 
+
+      // ✅ BUSINESS RULE: If status is being set to 'Open', force assigned_to to null
+    if (allowedFields.status === 'Open') {
+      allowedFields.assigned_to = null;
+      allowedFields.assigned_to_name = ''; // Clear the denormalized name too
+    }
+
     const updatedBug = await Bug.findByIdAndUpdate(
       bug._id,
       allowedFields,
